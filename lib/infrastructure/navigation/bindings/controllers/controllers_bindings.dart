@@ -1,0 +1,1 @@
+export 'package:bayamsalam/infrastructure/navigation/bindings/controllers/home.controller.binding.dart'; 
