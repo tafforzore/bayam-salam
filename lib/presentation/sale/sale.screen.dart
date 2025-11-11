@@ -147,7 +147,7 @@ class SaleScreen extends GetView<SaleController> {
                 filled: true,
                 fillColor: Colors.grey.shade50,
                 prefixIcon: Icon(Icons.euro, color: primaryColor),
-                suffixText: '€',
+                suffixText: 'FCFA',
               ),
               keyboardType: TextInputType.number,
               style: TextStyle(color: onSurfaceColor),
@@ -348,7 +348,7 @@ class SaleScreen extends GetView<SaleController> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '${sale.salePrice.toStringAsFixed(2)} €',
+                          '${sale.salePrice.toStringAsFixed(2)} FCFA',
                           style: TextStyle(
                             color: successColor,
                             fontWeight: FontWeight.w700,

@@ -58,7 +58,7 @@ class HomeScreen extends GetView<DashboardController> {
           color: surfaceColor,
           onRefresh: controller.loadDashboard,
           child: ListView(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(10.0),
             children: [
               // En-tête du mois
               Container(
@@ -92,7 +92,7 @@ class HomeScreen extends GetView<DashboardController> {
 
               // Cartes de résumé
               _buildSummaryCards(),
-              const SizedBox(height: 28),
+              const SizedBox(height: 8),
 
               // Section Actions Rapides
               Container(
@@ -222,6 +222,23 @@ class HomeScreen extends GetView<DashboardController> {
             colors: [Color(0xFFFF9800), Color(0xFFFFB74D)],
           ),
         ),
+        _SummaryCard(
+          title: 'Produit acheté',
+          amount: stats.totalProductCost,
+          icon: Icons.monetization_on,
+          color: stats.netProfit >= 0 ? errorColor : warningColor,
+          gradient: stats.netProfit >= 0
+              ? const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF4361EE), Color(0xFF4CC9F0)],
+          )
+              : const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF72695B), Color(0xFF5FDD04)],
+          ),
+        ),
       ],
     );
   }
@@ -261,21 +278,26 @@ class HomeScreen extends GetView<DashboardController> {
   Widget _buildRecentTransactions() {
     final transactions = controller.stats.value.recentTransactions;
     if (transactions.isEmpty) {
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 40),
-        child: Column(
-          children: [
-            Icon(Icons.receipt, size: 64, color: Colors.grey.shade300),
-            const SizedBox(height: 16),
-            Text(
-              'Aucune transaction ce mois-ci',
-              style: TextStyle(
-                color: Colors.grey.shade500,
-                fontSize: 16,
-              ),
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 40),
+            child: Column(
+              children: [
+                Icon(Icons.receipt, size: 64, color: Colors.grey.shade300),
+                const SizedBox(height: 16),
+                Text(
+                  'Aucune transaction ce mois-ci',
+                  style: TextStyle(
+                    color: Colors.grey.shade500,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       );
     }
     return ListView.builder(
@@ -286,53 +308,115 @@ class HomeScreen extends GetView<DashboardController> {
         final item = transactions[index];
         final isSale = controller.isSale(item);
         return Container(
-          margin: const EdgeInsets.only(bottom: 8),
+          margin: const EdgeInsets.only(bottom: 5),
           child: Card(
             elevation: 1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            child: ListTile(
-              leading: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: isSale ? successColor.withOpacity(0.1) : errorColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  isSale ? Icons.point_of_sale : Icons.receipt,
-                  color: isSale ? successColor : errorColor,
-                  size: 20,
-                ),
-              ),
-              title: Text(
-                controller.getTransactionTitle(item),
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: onSurfaceColor,
-                ),
-              ),
-              subtitle: Text(
-                DateFormat('le dd/MM/yyyy à HH:mm').format(controller.getTransactionDate(item)),
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                ),
-              ),
-              trailing: Text(
-                controller.getTransactionAmount(item),
-                style: TextStyle(
-                  color: isSale ? successColor : errorColor,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                ),
-              ),
-            ),
+            child:  buildTransactionCard(
+              item: item,
+              isSale: isSale,
+              successColor: Colors.green,
+              errorColor: Colors.red,
+              onSurfaceColor: Colors.black87,
+              controller: controller,
+            )
           ),
         );
       },
     );
   }
+}
+
+Widget buildTransactionCard({
+  required dynamic item,
+  required bool isSale,
+  required Color successColor,
+  required Color errorColor,
+  required Color onSurfaceColor,
+  required controller,
+}) {
+  return Container(
+    margin: const EdgeInsets.symmetric(vertical: 6),
+    padding: const EdgeInsets.fromLTRB(6, 6, 6, 2),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Icône transaction
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: (isSale ? successColor : errorColor).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                isSale ? Icons.point_of_sale : Icons.receipt_long_rounded,
+                color: isSale ? successColor : errorColor,
+                size: 22,
+              ),
+            ),
+
+            const SizedBox(width: 12),
+
+            // Texte principal (titre + date)
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    controller.getTransactionTitle(item),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: onSurfaceColor,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                ],
+              ),
+            ),
+
+          ],
+        ),
+        // Montant
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              controller.getTransactionAmount(item),
+              style: TextStyle(
+                color: isSale ? successColor : errorColor,
+                fontWeight: FontWeight.w700,
+                fontSize: 15,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              DateFormat("le dd/MM/yyyy à HH:mm")
+                  .format(controller.getTransactionDate(item)),
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ],
+        ),
+
+      ],
+    ),
+  );
 }
 
 // Widgets internes améliorés
@@ -387,7 +471,7 @@ class _SummaryCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                '${amount.toStringAsFixed(2)} €',
+                '${amount.toStringAsFixed(2)} FCFA',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,

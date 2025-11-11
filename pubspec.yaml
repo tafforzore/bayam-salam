@@ -21,6 +21,7 @@ dependencies:
   lottie: ^3.1.2
   introduction_screen: ^3.1.14
   shared_preferences: ^2.2.3
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -35,3 +36,9 @@ flutter:
   assets:
     # Vous devrez ajouter un dossier assets et une animation lottie
     - assets/animations/
+
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon.png"

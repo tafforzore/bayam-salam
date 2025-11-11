@@ -1,6 +1,7 @@
 import 'package:bayamsalam/domain/core/entities/expense.dart';
 import 'package:bayamsalam/domain/core/entities/product_sale.dart';
 import 'package:bayamsalam/infrastructure/dal/stores/report_store.dart';
+import 'package:bayamsalam/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -79,7 +80,7 @@ class ReportScreen extends GetView<ReportController> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 7),
         child: Column(
           children: [
             Row(
@@ -271,7 +272,7 @@ class ReportScreen extends GetView<ReportController> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          '${report.netResult >= 0 ? '+' : ''}${report.netResult.toStringAsFixed(2)} €',
+                          '${report.netResult >= 0 ? '+' : ''}${report.netResult.toStringAsFixed(2)} FCFA',
                           style: const TextStyle(
                             color: surfaceColor,
                             fontWeight: FontWeight.w700,
@@ -371,7 +372,7 @@ class ReportScreen extends GetView<ReportController> {
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                   decoration: BoxDecoration(
                     color: successColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -408,7 +409,7 @@ class ReportScreen extends GetView<ReportController> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -472,61 +473,113 @@ class ReportScreen extends GetView<ReportController> {
     final icon = isSale ? Icons.point_of_sale : Icons.receipt;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
       child: Card(
         elevation: 1,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        child: ListTile(
-          leading: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, color: color, size: 20),
-          ),
-          title: Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: onSurfaceColor,
-            ),
-          ),
-          subtitle: Text(
-            DateFormat('dd/MM/yyyy à HH:mm').format(date),
-            style: TextStyle(
-              color: Colors.grey.shade600,
-            ),
-          ),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '${isSale ? '+' : '-'}${amount.toStringAsFixed(2)} €',
-                style: TextStyle(
-                  color: color,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                DateFormat('dd/MM').format(date),
-                style: TextStyle(
-                  color: Colors.grey.shade500,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
+        child:   buildTransactionCard(
+          icon: isSale ? Icons.point_of_sale : Icons.receipt_long_rounded,
+          title: title,
+          date: date,
+          amount: amount,
+          isSale: isSale,
+          color: isSale ? Colors.green : Colors.red,
+          onSurfaceColor: Colors.black87,
         ),
       ),
     );
   }
+
+
+
+  Widget buildTransactionCard({
+    required IconData icon,
+    required String title,
+    required DateTime date,
+    required double amount,
+    required bool isSale,
+    required Color color,
+    required Color onSurfaceColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300, width: 0.8),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // ✅ Icône à gauche
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: color, size: 22),
+          ),
+
+          const SizedBox(width: 12),
+
+          // ✅ Titre + date principale
+          Expanded(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: onSurfaceColor,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          DateFormat('dd/MM/yyyy à HH:mm').format(date),
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    )
+
+
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      '${isSale ? '+' : '-'}${amount.toStringAsFixed(2)} FCFA',
+                      style: TextStyle(
+                        color: color,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // ✅ Montant + date courte (dd/MM)
+        ],
+      ),
+    );
+  }
+
 
   Widget _buildEmptyState() {
     return Center(
@@ -566,21 +619,26 @@ class ReportScreen extends GetView<ReportController> {
   }
 
   Widget _buildEmptyTransactionState(String message, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 40),
-      child: Column(
-        children: [
-          Icon(icon, size: 48, color: Colors.grey.shade300),
-          const SizedBox(height: 16),
-          Text(
-            message,
-            style: TextStyle(
-              color: Colors.grey.shade500,
-              fontSize: 14,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 40),
+          child: Column(
+            children: [
+              Icon(icon, size: 48, color: Colors.grey.shade300),
+              const SizedBox(height: 16),
+              Text(
+                message,
+                style: TextStyle(
+                  color: Colors.grey.shade500,
+                  fontSize: 14,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -666,10 +724,10 @@ class _SummaryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: ReportScreen.backgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -695,7 +753,7 @@ class _SummaryItem extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '${value.toStringAsFixed(2)} €',
+            '${value.toStringAsFixed(2)} FCFA',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,

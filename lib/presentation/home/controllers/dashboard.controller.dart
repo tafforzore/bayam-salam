@@ -66,9 +66,9 @@ class DashboardController extends GetxController with WidgetsBindingObserver {
 
   String getTransactionAmount(dynamic transaction) {
     if (isSale(transaction)) {
-      return '+ ${(transaction as ProductSale).salePrice.toStringAsFixed(2)} €';
+      return '+ ${(transaction as ProductSale).salePrice.toStringAsFixed(2)} FCFA';
     }
-    return '- ${(transaction as Expense).amount.toStringAsFixed(2)} €';
+    return '- ${(transaction as Expense).amount.toStringAsFixed(2)} FCFA';
   }
 
   DateTime getTransactionDate(dynamic transaction) {

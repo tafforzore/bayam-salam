@@ -2,13 +2,12 @@ import 'package:bayamsalam/domain/core/entities/product.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
+import '../../domain/core/entities/product_sale.dart';
 import 'controllers/product.controller.dart';
 
 class ProductScreen extends GetView<ProductController> {
   const ProductScreen({super.key});
 
-  // Palette de couleurs cohérente
   static const Color primaryColor = Color(0xFF4361EE);
   static const Color secondaryColor = Color(0xFF3A0CA3);
   static const Color accentColor = Color(0xFF4CC9F0);
@@ -43,7 +42,6 @@ class ProductScreen extends GetView<ProductController> {
             ),
           );
         }
-
         return _buildProductListWithForm();
       }),
     );
@@ -54,7 +52,6 @@ class ProductScreen extends GetView<ProductController> {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // Formulaire d'ajout
           Card(
             elevation: 2,
             shape: RoundedRectangleBorder(
@@ -66,8 +63,6 @@ class ProductScreen extends GetView<ProductController> {
             ),
           ),
           const SizedBox(height: 16),
-
-          // En-tête de la liste
           Row(
             children: [
               Icon(Icons.inventory_2, color: primaryColor, size: 20),
@@ -99,11 +94,7 @@ class ProductScreen extends GetView<ProductController> {
             ],
           ),
           const SizedBox(height: 12),
-
-          // Liste des produits
-          Expanded(
-            child: _buildProductList(),
-          ),
+          Expanded(child: _buildProductList()),
         ],
       ),
     );
@@ -122,94 +113,51 @@ class ProductScreen extends GetView<ProductController> {
           ),
         ),
         const SizedBox(height: 12),
-        Column(
-          children: [
-            TextFormField(
-              controller: controller.nameController,
-              decoration: InputDecoration(
-                labelText: 'Nom du produit',
-                labelStyle: TextStyle(color: Colors.grey.shade600),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.grey.shade400),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
-                ),
-                filled: true,
-                fillColor: Colors.grey.shade50,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              ),
-              style: TextStyle(fontSize: 14, color: onSurfaceColor),
+        TextFormField(
+          controller: controller.nameController,
+          decoration: InputDecoration(
+            labelText: 'Nom du produit',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: controller.purchasePriceController,
-              decoration: InputDecoration(
-                labelText: 'Prix d\'achat',
-                labelStyle: TextStyle(color: Colors.grey.shade600),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.grey.shade400),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
-                ),
-                filled: true,
-                fillColor: Colors.grey.shade50,
-                prefixText: '€ ',
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              style: TextStyle(fontSize: 14, color: onSurfaceColor),
+            filled: true,
+            fillColor: Colors.grey.shade50,
+          ),
+        ),
+        const SizedBox(height: 12),
+        TextFormField(
+          controller: controller.purchasePriceController,
+          decoration: InputDecoration(
+            labelText: 'Prix d\'achat',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: controller.isEditing.value
-                          ? [warningColor, const Color(0xFFFFB74D)]
-                          : [successColor, const Color(0xFF66BB6A)],
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: (controller.isEditing.value ? warningColor : successColor).withOpacity(0.3),
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: ElevatedButton.icon(
-                    icon: Icon(
-                      controller.isEditing.value ? Icons.edit : Icons.add,
-                      size: 18,
-                      color: surfaceColor,
-                    ),
-                    label: Text(
-                      controller.isEditing.value ? 'Modifier' : 'Ajouter',
-                      style: TextStyle(
-                        color: surfaceColor,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
-                    onPressed: () => controller.isEditing.value ? controller.updateProduct() : controller.addProduct(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    ),
-                  ),
-                ),
-              ],
+            prefixText: 'FCFA ',
+            filled: true,
+            fillColor: Colors.grey.shade50,
+          ),
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        ),
+        const SizedBox(height: 12),
+        Align(
+          alignment: Alignment.centerRight,
+          child: ElevatedButton.icon(
+            icon: Icon(
+              controller.isEditing.value ? Icons.edit : Icons.add,
+              color: surfaceColor,
             ),
-          ],
+            label: Text(
+              controller.isEditing.value ? 'Modifier' : 'Ajouter',
+              style: const TextStyle(color: surfaceColor),
+            ),
+            onPressed: () => controller.isEditing.value
+                ? controller.updateProduct()
+                : controller.addProduct(),
+            style: ElevatedButton.styleFrom(
+              backgroundColor:
+              controller.isEditing.value ? warningColor : successColor,
+            ),
+          ),
         ),
       ],
     );
@@ -217,29 +165,8 @@ class ProductScreen extends GetView<ProductController> {
 
   Widget _buildProductList() {
     if (controller.products.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey.shade300),
-            const SizedBox(height: 16),
-            Text(
-              'Aucun produit enregistré',
-              style: TextStyle(
-                color: Colors.grey.shade500,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Ajoutez votre premier produit pour commencer',
-              style: TextStyle(
-                color: Colors.grey.shade400,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
+      return const Center(
+        child: Text('Aucun produit enregistré'),
       );
     }
 
@@ -247,71 +174,103 @@ class ProductScreen extends GetView<ProductController> {
       itemCount: controller.products.length,
       itemBuilder: (context, index) {
         final product = controller.products[index];
-        return Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          child: Card(
-            elevation: 1,
-            shape: RoundedRectangleBorder(
+        return Card(
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.15),
+                  blurRadius: 6,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
-            child: ListTile(
-              leading: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(Icons.inventory_2, color: primaryColor, size: 20),
-              ),
-              title: Text(
-                product.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: onSurfaceColor,
-                ),
-              ),
-              subtitle: Text(
-                'Prix d\'achat: ${product.purchasePrice.toStringAsFixed(2)} €',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                ),
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.visibility, color: primaryColor),
-                    onPressed: () => _showProductDetailsDialog(context, product),
-                    tooltip: 'Voir les détails',
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Icône principale
+                Container(
+                  width: 45,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    color: primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.edit, color: warningColor),
-                    onPressed: () => controller.startEditing(product),
-                    tooltip: 'Modifier',
+                  child: const Icon(Icons.inventory_2, color: Colors.blueGrey),
+                ),
+
+                const SizedBox(width: 12),
+
+                // Informations du produit
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => _showProductDetailsDialog(context, product),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.name,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Prix d\'achat : ${product.purchasePrice.toStringAsFixed(0)} FCFA',
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.delete, color: errorColor),
-                    onPressed: () => _showDeleteDialog(product),
-                    tooltip: 'Supprimer',
-                  ),
-                ],
-              ),
+                ),
+
+                // Actions
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit_note),
+                      color: warningColor,
+                      tooltip: 'Modifier',
+                      onPressed: () => controller.startEditing(product),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete_outline),
+                      color: errorColor,
+                      tooltip: 'Supprimer',
+                      onPressed: () => _showDeleteDialog(product),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ),
+          )
+
         );
       },
     );
   }
 
   void _showProductDetailsDialog(BuildContext context, Product product) {
+    // Force le recalcul des stats juste avant d'afficher la vue
+    controller.calculateStatsFor(product);
+
     showDialog(
       context: context,
       barrierColor: Colors.black.withOpacity(0.8),
       builder: (context) => Dialog(
         backgroundColor: backgroundColor,
         insetPadding: EdgeInsets.zero,
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: _buildProductDetailView(product),
@@ -321,7 +280,6 @@ class ProductScreen extends GetView<ProductController> {
   }
 
   Widget _buildProductDetailView(Product product) {
-    final stats = controller.productStats.value;
     final sortedSales = product.sales.toList()
       ..sort((a, b) => b.saleDate.compareTo(a.saleDate));
 
@@ -329,103 +287,60 @@ class ProductScreen extends GetView<ProductController> {
       backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: primaryColor,
-        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: surfaceColor),
           onPressed: () => Get.back(),
         ),
-        title: Text(
+        title: const Text(
           'Détails du Produit',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            color: surfaceColor,
-          ),
+          style: TextStyle(color: surfaceColor),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit, color: surfaceColor),
-            onPressed: () {
-              Get.back();
-              controller.startEditing(product);
-            },
-            tooltip: 'Modifier le produit',
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // En-tête du produit
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [primaryColor.withOpacity(0.1), accentColor.withOpacity(0.05)],
+            // Produit
+            Row(
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.inventory_2,
+                      color: surfaceColor, size: 20),
                 ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: primaryColor,
-                      borderRadius: BorderRadius.circular(12),
+                const SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Nom :${product.name}",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: onSurfaceColor,
+                      ),
                     ),
-                    child: const Icon(Icons.inventory_2, color: surfaceColor, size: 36),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product.name,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
-                            color: onSurfaceColor,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Produit enregistré',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: primaryColor,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            'Prix d\'achat: ${product.purchasePrice.toStringAsFixed(2)} €',
-                            style: const TextStyle(
-                              color: surfaceColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ],
+                    Text(
+                     "Prix achat :${product.purchasePrice.toString()} FCFA",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: onSurfaceColor,
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
+            const SizedBox(height: 24),
 
-            const SizedBox(height: 32),
-
-            // Cartes de statistiques
+            // Statistiques (mise à jour automatique)
             Text(
               'Statistiques',
               style: TextStyle(
@@ -435,100 +350,51 @@ class ProductScreen extends GetView<ProductController> {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: _StatCard(
-                    title: 'Revenu Total',
-                    value: '${stats.totalRevenue.toStringAsFixed(2)} €',
-                    subtitle: 'Chiffre d\'affaires',
-                    color: successColor,
-                    icon: Icons.trending_up,
+            Obx(() {
+              final stats = controller.productStats.value;
+              return Row(
+                children: [
+                  Expanded(
+                    child: _StatCard(
+                      title: 'Revenu Total',
+                      value: '${stats.totalRevenue.toStringAsFixed(0)} FCFA',
+                      subtitle: 'Chiffre d\'affaires',
+                      color: successColor,
+                      icon: Icons.trending_up,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _StatCard(
-                    title: 'Bénéfice Net',
-                    value: '${stats.netProfit.toStringAsFixed(2)} €',
-                    subtitle: 'Profit réalisé',
-                    color: stats.netProfit >= 0 ? primaryColor : warningColor,
-                    icon: stats.netProfit >= 0 ? Icons.attach_money : Icons.warning,
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _StatCard(
+                      title: 'Bénéfice Net',
+                      value: '${stats.netProfit.toStringAsFixed(0)} FCFA',
+                      subtitle: 'Profit réalisé',
+                      color: stats.netProfit >= 0 ? primaryColor : warningColor,
+                      icon: stats.netProfit >= 0
+                          ? Icons.attach_money
+                          : Icons.warning,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                // Expanded(
-                //   child: _StatCard(
-                //     title: 'Nombre de Ventes',
-                //     value: '${stats.salesCount}',
-                //     subtitle: 'Transactions',
-                //     color: secondaryColor,
-                //     icon: Icons.shopping_cart,
-                //   ),
-                // ),
-              ],
-            ),
+                ],
+              );
+            }),
 
             const SizedBox(height: 32),
-
-            // Section historique des ventes
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: surfaceColor,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.history, color: primaryColor, size: 24),
-                      const SizedBox(width: 12),
-                      Text(
-                        'Historique des Ventes',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: onSurfaceColor,
-                        ),
-                      ),
-                      const Spacer(),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: primaryColor.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          '${stats.salesCount} vente(s)',
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-
-                  if (sortedSales.isEmpty)
-                    _buildEmptySales()
-                  else
-                    Column(
-                      children: sortedSales.map((sale) => _SaleItem(sale: sale)).toList(),
-                    ),
-                ],
+            Text(
+              'Historique des ventes',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: onSurfaceColor,
               ),
             ),
+            const SizedBox(height: 12),
+            if (sortedSales.isEmpty)
+              _buildEmptySales()
+            else
+              Column(
+                children:                sortedSales.map((s) => _SaleItem(sale: s)).toList(),
+              ),
           ],
         ),
       ),
@@ -536,28 +402,10 @@ class ProductScreen extends GetView<ProductController> {
   }
 
   Widget _buildEmptySales() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 40),
-      child: Column(
-        children: [
-          Icon(Icons.point_of_sale, size: 64, color: Colors.grey.shade300),
-          const SizedBox(height: 16),
-          Text(
-            'Aucune vente enregistrée',
-            style: TextStyle(
-              color: Colors.grey.shade500,
-              fontSize: 16,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Les ventes de ce produit apparaîtront ici',
-            style: TextStyle(
-              color: Colors.grey.shade400,
-              fontSize: 14,
-            ),
-          ),
-        ],
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 40),
+        child: Text('Aucune vente enregistrée'),
       ),
     );
   }
@@ -565,99 +413,16 @@ class ProductScreen extends GetView<ProductController> {
   void _showDeleteDialog(Product product) {
     Get.dialog(
       AlertDialog(
-        backgroundColor: surfaceColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Row(
-          children: [
-            Icon(Icons.warning_amber, color: errorColor),
-            const SizedBox(width: 12),
-            Text(
-              'Supprimer le produit',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: onSurfaceColor,
-              ),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Êtes-vous sûr de vouloir supprimer définitivement le produit :',
-              style: TextStyle(color: Colors.grey.shade600),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: errorColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.inventory_2, color: errorColor, size: 20),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      product.name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: onSurfaceColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Cette action est irréversible.',
-              style: TextStyle(
-                color: errorColor,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
+        title: const Text('Supprimer le produit'),
+        content: Text('Voulez-vous supprimer "${product.name}" ?'),
         actions: [
+          TextButton(onPressed: () => Get.back(), child: const Text('Annuler')),
           TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'Annuler',
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [errorColor, errorColor.withOpacity(0.8)],
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: ElevatedButton(
-              onPressed: () {
-                Get.back();
-                controller.deleteProduct(product.id);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
-              child: const Text(
-                'Supprimer',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
+            onPressed: () {
+              controller.deleteProduct(product.id);
+              Get.back();
+            },
+            child: const Text('Supprimer', style: TextStyle(color: errorColor)),
           ),
         ],
       ),
@@ -665,7 +430,6 @@ class ProductScreen extends GetView<ProductController> {
   }
 }
 
-// Carte de statistiques
 class _StatCard extends StatelessWidget {
   final String title;
   final String value;
@@ -684,130 +448,62 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: ProductScreen.backgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            blurRadius: 6,
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(icon, color: color, size: 24),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade600,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title,
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+              Icon(icon, color: color, size: 24),
+            ],
           ),
           const SizedBox(height: 8),
           Text(
             value,
             style: TextStyle(
               fontSize: 20,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.bold,
               color: color,
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade500,
-            ),
-          ),
+          Text(subtitle,
+              style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
         ],
       ),
     );
   }
 }
 
-// Élément de vente
 class _SaleItem extends StatelessWidget {
-  final dynamic sale;
-
+  final ProductSale sale;
   const _SaleItem({required this.sale});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade50,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: ProductScreen.successColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              Icons.point_of_sale,
-              color: ProductScreen.successColor,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 16),
+          const Icon(Icons.point_of_sale, color: ProductScreen.successColor),
+          const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Vente effectuée',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: ProductScreen.onSurfaceColor,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  DateFormat('dd/MM/yyyy à HH:mm').format(sale.saleDate),
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: ProductScreen.successColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
             child: Text(
-              '+${sale.salePrice.toStringAsFixed(2)} €',
-              style: TextStyle(
-                color: ProductScreen.successColor,
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-              ),
+              'Vendu pour ${sale.salePrice.toStringAsFixed(0)} FCFA - '
+                  '${DateFormat('dd/MM/yyyy').format(sale.saleDate)}',
             ),
           ),
         ],

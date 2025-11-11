@@ -88,7 +88,6 @@ class ExpenseScreen extends GetView<ExpenseController> {
                   ),
                   const Spacer(),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -227,8 +226,8 @@ class ExpenseScreen extends GetView<ExpenseController> {
             ),
             filled: true,
             fillColor: Colors.grey.shade50,
-            prefixIcon: Icon(Icons.euro, color: primaryColor),
-            suffixText: '€',
+            prefixIcon: Icon(Icons.money_outlined, color: primaryColor),
+            suffixText: 'FCFA',
             suffixStyle: TextStyle(
               color: onSurfaceColor,
               fontWeight: FontWeight.bold,
@@ -335,7 +334,7 @@ class ExpenseScreen extends GetView<ExpenseController> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       child: ListView.builder(
         itemCount: controller.expenses.length,
         itemBuilder: (context, index) {
@@ -347,99 +346,163 @@ class ExpenseScreen extends GetView<ExpenseController> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: ListTile(
-                leading: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: errorColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    _getCategoryIcon(expense.category),
-                    color: errorColor,
-                    size: 20,
-                  ),
-                ),
-                title: Text(
-                  expense.description,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: onSurfaceColor,
-                  ),
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 4),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        _getCategoryName(expense.category),
-                        style: TextStyle(
-                          color: primaryColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      DateFormat('dd/MM/yyyy à HH:mm').format(expense.createdAt),
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          '${expense.amount.toStringAsFixed(2)} €',
-                          style: TextStyle(
-                            color: errorColor,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          DateFormat('dd/MM').format(expense.createdAt),
-                          style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 8),
-                    IconButton(
-                      icon: Icon(Icons.edit_note, color: warningColor),
-                      onPressed: () => controller.startEditing(expense),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.delete_outline, color: errorColor),
-                      onPressed: () => _showDeleteDialog(expense),
-                    ),
-                  ],
-                ),
-              ),
+              child: buildExpenseCard(
+                expense: expense,
+                primaryColor: primaryColor,
+                errorColor: errorColor,
+                warningColor: warningColor,
+                onSurfaceColor: onSurfaceColor,
+                getCategoryIcon: _getCategoryIcon,
+                getCategoryName: _getCategoryName,
+                onEdit: (exp) => controller.startEditing(exp),
+                onDelete: (exp) => _showDeleteDialog(exp),
+              )
+              ,
             ),
           );
         },
       ),
     );
   }
+
+  Widget buildExpenseCard({
+    required Expense expense,
+    required Color primaryColor,
+    required Color errorColor,
+    required Color warningColor,
+    required Color onSurfaceColor,
+    required IconData Function(ExpenseCategory category) getCategoryIcon,
+    required String Function(ExpenseCategory category) getCategoryName,
+    required Function(Expense expense) onEdit,
+    required Function(Expense expense) onDelete,
+  }) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300, width: 0.8),
+
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ✅ Icône de la catégorie
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: errorColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              getCategoryIcon(expense.category),
+              color: errorColor,
+              size: 22,
+            ),
+          ),
+
+          const SizedBox(width: 10),
+
+          // ✅ Détails du texte (description, catégorie, date)
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  expense.description,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: onSurfaceColor,
+                    fontSize: 15,
+                  ),
+                ),
+                const SizedBox(height: 6),
+
+                // Catégorie en badge
+                Container(
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    getCategoryName(expense.category),
+                    style: TextStyle(
+                      color: primaryColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 6),
+
+                // Date complète
+                Text(
+                  DateFormat('dd/MM/yyyy à HH:mm').format(expense.createdAt),
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(width: 8),
+
+          // ✅ Montant + boutons d’action
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '${expense.amount.toStringAsFixed(2)} FCFA',
+                style: TextStyle(
+                  color: errorColor,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                DateFormat('dd/MM').format(expense.createdAt),
+                style: TextStyle(
+                  color: Colors.grey.shade500,
+                  fontSize: 12,
+                ),
+              ),
+              const SizedBox(height: 6),
+
+              // Boutons édition + suppression
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.edit_note, color: warningColor, size: 22),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () => onEdit(expense),
+                  ),
+                  const SizedBox(width: 4),
+                  IconButton(
+                    icon: Icon(Icons.delete_outline, color: errorColor, size: 22),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () => onDelete(expense),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+
 
   // Méthodes d'aide pour les catégories (à adapter selon votre implémentation)
   String _getCategoryName(ExpenseCategory category) {
