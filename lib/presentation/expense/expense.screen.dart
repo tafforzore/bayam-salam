@@ -571,7 +571,7 @@ class ExpenseScreen extends GetView<ExpenseController> {
             const SizedBox(width: 8),
             Text(
               'Confirmer la suppression',
-              style: TextStyle(color: onSurfaceColor, overflow: TextOverflow.ellipsis, fontSize: 20),
+              style: TextStyle(color: onSurfaceColor, overflow: TextOverflow.ellipsis, fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),

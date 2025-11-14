@@ -34,7 +34,7 @@ class DashboardStore {
         month.expenses.map((e) => e.amount).sum;
 
     // Total des dépenses = dépenses manuelles + coût d’achat produits
-    final double totalExpenses = manualExpenses + totalProductCost;
+    final double totalExpenses = manualExpenses;
 
     // Profit net
     final double netProfit = totalIncome - totalExpenses;

@@ -1,4 +1,5 @@
 import 'package:bayamsalam/domain/core/entities/product_sale.dart';
+import 'package:bayamsalam/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -313,39 +314,68 @@ class SaleScreen extends GetView<SaleController> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: ListTile(
-                leading: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: successColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    Icons.monetization_on_outlined,
-                    color: successColor,
-                    size: 20,
-                  ),
-                ),
-                title: Text(
-                  'Vente de ${controller.getProductName(sale)}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: onSurfaceColor,
-                  ),
-                ),
-                subtitle: Text(
-                  DateFormat('le dd/MM/yyyy à HH:mm').format(sale.saleDate),
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: successColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.monetization_on_outlined,
+                            color: successColor,
+                            size: 20,
+                          ),
+                        ),
+                        SizedBox(width: 10,),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width*.60  ,
+                              child: Text(
+                                'Vente de ${controller.getProductName(sale)}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: onSurfaceColor,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              DateFormat('le dd/MM/yyyy à HH:mm').format(sale.saleDate),
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            // IconButton(
+                            //   padding: EdgeInsets.all(0),
+                            //   icon: Icon(Icons.edit_note, color: warningColor),
+                            //   onPressed: () => controller.startEditing(sale),
+                            // ),
+                            IconButton(
+                              icon: Icon(Icons.delete_outline, color: errorColor),
+                              onPressed: () => _showDeleteDialog(sale),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
                           '${sale.salePrice.toStringAsFixed(2)} FCFA',
@@ -355,25 +385,8 @@ class SaleScreen extends GetView<SaleController> {
                             fontSize: 16,
                           ),
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          DateFormat('dd/MM').format(sale.saleDate),
-                          style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontSize: 12,
-                          ),
-                        ),
                       ],
-                    ),
-                    const SizedBox(width: 8),
-                    IconButton(
-                      icon: Icon(Icons.edit_note, color: warningColor),
-                      onPressed: () => controller.startEditing(sale),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.delete_outline, color: errorColor),
-                      onPressed: () => _showDeleteDialog(sale),
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -401,7 +414,7 @@ class SaleScreen extends GetView<SaleController> {
             const SizedBox(width: 8),
             Text(
               'Confirmer la suppression',
-              style: TextStyle(color: onSurfaceColor),
+              style: TextStyle(color: onSurfaceColor, fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),

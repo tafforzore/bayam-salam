@@ -471,10 +471,10 @@ class _SummaryCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                '${amount.toStringAsFixed(2)} FCFA',
+                '${amount.toString()} FCFA',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),
               ),
