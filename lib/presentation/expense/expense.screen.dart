@@ -2,6 +2,7 @@ import 'package:bayamsalam/domain/core/entities/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 
 import 'controllers/expense.controller.dart';
 
@@ -26,11 +27,12 @@ class ExpenseScreen extends GetView<ExpenseController> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Gestion des Dépenses',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: surfaceColor,
+            fontSize: 18.sp,
           ),
         ),
         backgroundColor: primaryColor,
@@ -51,22 +53,22 @@ class ExpenseScreen extends GetView<ExpenseController> {
           children: [
             // Formulaire avec carte
             Card(
-              margin: const EdgeInsets.all(16),
+              margin: EdgeInsets.all(4.w),
               elevation: 2,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(5.w),
                 child: _buildExpenseForm(context),
               ),
             ),
 
             // Séparateur stylisé
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: 6.w),
               child: Divider(
-                height: 32,
+                height: 4.h,
                 thickness: 1,
                 color: Colors.grey.shade300,
               ),
@@ -74,20 +76,22 @@ class ExpenseScreen extends GetView<ExpenseController> {
 
             // En-tête des dépenses
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: 6.w),
               child: Row(
                 children: [
-                  Icon(Icons.receipt_long, color: primaryColor, size: 20),
-                  const SizedBox(width: 8),
+                  Icon(Icons.receipt_long, color: primaryColor, size: 22.sp),
+                  SizedBox(width: 2.w),
                   Text(
                     'Dépenses du Mois',
                     style: textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: onSurfaceColor,
+                      fontSize: 16.sp,
                     ),
                   ),
                   const Spacer(),
                   Container(
+                    padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
                     decoration: BoxDecoration(
                       color: primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -97,14 +101,14 @@ class ExpenseScreen extends GetView<ExpenseController> {
                       style: TextStyle(
                         color: primaryColor,
                         fontWeight: FontWeight.w500,
-                        fontSize: 12,
+                        fontSize: 12.sp,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 2.h),
 
             // Liste des dépenses
             Expanded(
@@ -125,27 +129,27 @@ class ExpenseScreen extends GetView<ExpenseController> {
             Icon(
               controller.isEditing.value ? Icons.edit_note : Icons.add_circle,
               color: controller.isEditing.value ? warningColor : primaryColor,
-              size: 24,
+              size: 24.sp,
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 2.w),
             Text(
               controller.isEditing.value ? 'Modifier la dépense' : 'Nouvelle dépense',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
                 color: onSurfaceColor,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 2.h),
 
         // Champ description
         TextFormField(
           controller: controller.descriptionController,
           decoration: InputDecoration(
             labelText: 'Description',
-            labelStyle: TextStyle(color: Colors.grey.shade600),
+            labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: Colors.grey.shade400),
@@ -156,18 +160,18 @@ class ExpenseScreen extends GetView<ExpenseController> {
             ),
             filled: true,
             fillColor: Colors.grey.shade50,
-            prefixIcon: Icon(Icons.description, color: primaryColor),
+            prefixIcon: Icon(Icons.description, color: primaryColor, size: 20.sp),
           ),
-          style: TextStyle(color: onSurfaceColor),
+          style: TextStyle(color: onSurfaceColor, fontSize: 14.sp),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 2.h),
 
         // Catégorie
         DropdownButtonFormField<ExpenseCategory>(
           value: controller.selectedCategory.value,
           hint: Text(
             'Catégorie',
-            style: TextStyle(color: Colors.grey.shade600),
+            style: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
           ),
           onChanged: (value) {
             if (value != null) {
@@ -182,12 +186,12 @@ class ExpenseScreen extends GetView<ExpenseController> {
                   Icon(
                     _getCategoryIcon(category),
                     color: primaryColor,
-                    size: 20,
+                    size: 20.sp,
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 2.w),
                   Text(
                     _getCategoryName(category),
-                    style: TextStyle(color: onSurfaceColor),
+                    style: TextStyle(color: onSurfaceColor, fontSize: 14.sp),
                   ),
                 ],
               ),
@@ -206,16 +210,16 @@ class ExpenseScreen extends GetView<ExpenseController> {
             fillColor: Colors.grey.shade50,
           ),
           dropdownColor: surfaceColor,
-          style: TextStyle(color: onSurfaceColor),
+          style: TextStyle(color: onSurfaceColor, fontSize: 14.sp),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 2.h),
 
         // Montant
         TextFormField(
           controller: controller.amountController,
           decoration: InputDecoration(
             labelText: 'Montant',
-            labelStyle: TextStyle(color: Colors.grey.shade600),
+            labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: Colors.grey.shade400),
@@ -226,22 +230,23 @@ class ExpenseScreen extends GetView<ExpenseController> {
             ),
             filled: true,
             fillColor: Colors.grey.shade50,
-            prefixIcon: Icon(Icons.money_outlined, color: primaryColor),
+            prefixIcon: Icon(Icons.money_outlined, color: primaryColor, size: 20.sp),
             suffixText: 'FCFA',
             suffixStyle: TextStyle(
               color: onSurfaceColor,
               fontWeight: FontWeight.bold,
+              fontSize: 14.sp,
             ),
           ),
           keyboardType: TextInputType.number,
-          style: TextStyle(color: onSurfaceColor),
+          style: TextStyle(color: onSurfaceColor, fontSize: 14.sp),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 3.h),
 
         // Bouton d'action
         Container(
           width: double.infinity,
-          height: 50,
+          height: 6.h,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -263,13 +268,14 @@ class ExpenseScreen extends GetView<ExpenseController> {
             icon: Icon(
               controller.isEditing.value ? Icons.edit : Icons.add,
               color: surfaceColor,
+              size: 20.sp,
             ),
             label: Text(
               controller.isEditing.value ? 'Modifier la dépense' : 'Ajouter la dépense',
-              style: const TextStyle(
+              style: TextStyle(
                 color: surfaceColor,
                 fontWeight: FontWeight.w600,
-                fontSize: 16,
+                fontSize: 14.sp,
               ),
             ),
             onPressed: () {
@@ -287,10 +293,13 @@ class ExpenseScreen extends GetView<ExpenseController> {
 
         // Bouton annuler en mode édition
         if (controller.isEditing.value) ...[
-          const SizedBox(height: 12),
+          SizedBox(height: 1.h),
           TextButton.icon(
-            icon: const Icon(Icons.cancel_outlined),
-            label: const Text('Annuler'),
+            icon: Icon(Icons.cancel_outlined, size: 18.sp),
+            label: Text(
+              'Annuler',
+              style: TextStyle(fontSize: 14.sp),
+            ),
             onPressed: () => _cancelEditing(),
             style: TextButton.styleFrom(
               foregroundColor: errorColor,
@@ -309,23 +318,23 @@ class ExpenseScreen extends GetView<ExpenseController> {
           children: [
             Icon(
               Icons.money_off,
-              size: 64,
+              size: 70.sp,
               color: Colors.grey.shade300,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 2.h),
             Text(
               'Aucune dépense ce mois-ci',
               style: TextStyle(
                 color: Colors.grey.shade500,
-                fontSize: 16,
+                fontSize: 16.sp,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 1.h),
             Text(
               'Ajoutez votre première dépense',
               style: TextStyle(
                 color: Colors.grey.shade400,
-                fontSize: 14,
+                fontSize: 14.sp,
               ),
             ),
           ],
@@ -334,13 +343,13 @@ class ExpenseScreen extends GetView<ExpenseController> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 1.w),
       child: ListView.builder(
         itemCount: controller.expenses.length,
         itemBuilder: (context, index) {
           final expense = controller.expenses[index];
           return Container(
-            margin: const EdgeInsets.only(bottom: 8),
+            margin: EdgeInsets.only(bottom: 1.h),
             child: Card(
               elevation: 1,
               shape: RoundedRectangleBorder(
@@ -356,8 +365,7 @@ class ExpenseScreen extends GetView<ExpenseController> {
                 getCategoryName: _getCategoryName,
                 onEdit: (exp) => controller.startEditing(exp),
                 onDelete: (exp) => _showDeleteDialog(exp),
-              )
-              ,
+              ),
             ),
           );
         },
@@ -377,21 +385,20 @@ class ExpenseScreen extends GetView<ExpenseController> {
     required Function(Expense expense) onDelete,
   }) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      padding: const EdgeInsets.all(12),
+      margin: EdgeInsets.symmetric(vertical: 0.5.h),
+      padding: EdgeInsets.all(3.w),
       decoration: BoxDecoration(
         color: Colors.grey.shade50,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade300, width: 0.8),
-
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ✅ Icône de la catégorie
+          // Icône de la catégorie
           Container(
-            width: 42,
-            height: 42,
+            width: 12.w,
+            height: 12.w,
             decoration: BoxDecoration(
               color: errorColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
@@ -399,13 +406,13 @@ class ExpenseScreen extends GetView<ExpenseController> {
             child: Icon(
               getCategoryIcon(expense.category),
               color: errorColor,
-              size: 22,
+              size: 20.sp,
             ),
           ),
 
-          const SizedBox(width: 10),
+          SizedBox(width: 3.w),
 
-          // ✅ Détails du texte (description, catégorie, date)
+          // Détails du texte (description, catégorie, date)
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -415,15 +422,14 @@ class ExpenseScreen extends GetView<ExpenseController> {
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: onSurfaceColor,
-                    fontSize: 15,
+                    fontSize: 14.sp,
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: 1.h),
 
                 // Catégorie en badge
                 Container(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.5.h),
                   decoration: BoxDecoration(
                     color: primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(6),
@@ -432,29 +438,29 @@ class ExpenseScreen extends GetView<ExpenseController> {
                     getCategoryName(expense.category),
                     style: TextStyle(
                       color: primaryColor,
-                      fontSize: 12,
+                      fontSize: 11.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 6),
+                SizedBox(height: 1.h),
 
                 // Date complète
                 Text(
                   DateFormat('dd/MM/yyyy à HH:mm').format(expense.createdAt),
                   style: TextStyle(
                     color: Colors.grey.shade600,
-                    fontSize: 12,
+                    fontSize: 11.sp,
                   ),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(width: 8),
+          SizedBox(width: 2.w),
 
-          // ✅ Montant + boutons d’action
+          // Montant + boutons d'action
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -463,32 +469,32 @@ class ExpenseScreen extends GetView<ExpenseController> {
                 style: TextStyle(
                   color: errorColor,
                   fontWeight: FontWeight.w700,
-                  fontSize: 16,
+                  fontSize: 14.sp,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 0.5.h),
               Text(
                 DateFormat('dd/MM').format(expense.createdAt),
                 style: TextStyle(
                   color: Colors.grey.shade500,
-                  fontSize: 12,
+                  fontSize: 11.sp,
                 ),
               ),
-              const SizedBox(height: 6),
+              SizedBox(height: 1.h),
 
               // Boutons édition + suppression
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.edit_note, color: warningColor, size: 22),
+                    icon: Icon(Icons.edit_note, color: warningColor, size: 20.sp),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                     onPressed: () => onEdit(expense),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 1.w),
                   IconButton(
-                    icon: Icon(Icons.delete_outline, color: errorColor, size: 22),
+                    icon: Icon(Icons.delete_outline, color: errorColor, size: 20.sp),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                     onPressed: () => onDelete(expense),
@@ -502,9 +508,7 @@ class ExpenseScreen extends GetView<ExpenseController> {
     );
   }
 
-
-
-  // Méthodes d'aide pour les catégories (à adapter selon votre implémentation)
+  // Méthodes d'aide pour les catégories
   String _getCategoryName(ExpenseCategory category) {
     switch (category) {
       case ExpenseCategory.supplies:
@@ -556,8 +560,6 @@ class ExpenseScreen extends GetView<ExpenseController> {
     controller.isEditing.value = false;
     controller.descriptionController.clear();
     controller.amountController.clear();
-    // Réinitialiser la catégorie à la valeur par défaut si nécessaire
-    // controller.selectedCategory.value = ExpenseCategory.other;
   }
 
   void _showDeleteDialog(Expense expense) {
@@ -567,24 +569,30 @@ class ExpenseScreen extends GetView<ExpenseController> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
-            Icon(Icons.warning, color: errorColor),
-            const SizedBox(width: 8),
-            Text(
-              'Confirmer la suppression',
-              style: TextStyle(color: onSurfaceColor, overflow: TextOverflow.ellipsis, fontSize: 16, fontWeight: FontWeight.bold),
+            Icon(Icons.warning, color: errorColor, size: 22.sp),
+            SizedBox(width: 2.w),
+            Expanded(
+              child: Text(
+                'Confirmer la suppression',
+                style: TextStyle(
+                    color: onSurfaceColor,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold
+                ),
+              ),
             ),
           ],
         ),
         content: Text(
           'Êtes-vous sûr de vouloir supprimer la dépense "${expense.description}" ?',
-          style: TextStyle(color: onSurfaceColor),
+          style: TextStyle(color: onSurfaceColor, fontSize: 14.sp),
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
             child: Text(
               'Annuler',
-              style: TextStyle(color: Colors.grey.shade600),
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
             ),
           ),
           Container(
@@ -603,9 +611,9 @@ class ExpenseScreen extends GetView<ExpenseController> {
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
               ),
-              child: const Text(
+              child: Text(
                 'Supprimer',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white, fontSize: 14.sp),
               ),
             ),
           ),

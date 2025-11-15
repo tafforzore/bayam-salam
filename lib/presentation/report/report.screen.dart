@@ -5,6 +5,7 @@ import 'package:bayamsalam/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 
 import 'controllers/report.controller.dart';
 
@@ -27,11 +28,12 @@ class ReportScreen extends GetView<ReportController> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Bilan Mensuel',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: surfaceColor,
+            fontSize: 18.sp,
           ),
         ),
         backgroundColor: primaryColor,
@@ -39,7 +41,7 @@ class ReportScreen extends GetView<ReportController> {
         iconTheme: const IconThemeData(color: surfaceColor),
         actions: [
           IconButton(
-            icon: const Icon(Icons.download),
+            icon: Icon(Icons.download, size: 22.sp),
             onPressed: () => _showExportOptions(),
             tooltip: 'Exporter le rapport',
           ),
@@ -49,7 +51,7 @@ class ReportScreen extends GetView<ReportController> {
         children: [
           // Sélecteurs de date améliorés
           _buildDateSelector(),
-          const SizedBox(height: 8),
+          SizedBox(height: 1.h),
 
           // Affichage du rapport
           Expanded(
@@ -74,30 +76,30 @@ class ReportScreen extends GetView<ReportController> {
 
   Widget _buildDateSelector() {
     return Card(
-      margin: const EdgeInsets.all(16),
+      margin: EdgeInsets.all(4.w),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 7),
+        padding: EdgeInsets.fromLTRB(4.w, 3.h, 4.w, 2.h),
         child: Column(
           children: [
             Row(
               children: [
-                Icon(Icons.calendar_today, color: primaryColor, size: 20),
-                const SizedBox(width: 8),
+                Icon(Icons.calendar_today, color: primaryColor, size: 20.sp),
+                SizedBox(width: 2.w),
                 Text(
                   'Période du rapport',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: onSurfaceColor,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 2.h),
             Row(
               children: [
                 Expanded(
@@ -108,11 +110,11 @@ class ReportScreen extends GetView<ReportController> {
                         value: y,
                         child: Row(
                           children: [
-                            Icon(Icons.calendar_month, color: primaryColor, size: 18),
-                            const SizedBox(width: 8),
+                            Icon(Icons.calendar_month, color: primaryColor, size: 18.sp),
+                            SizedBox(width: 2.w),
                             Text(
                               y.toString(),
-                              style: TextStyle(color: onSurfaceColor),
+                              style: TextStyle(color: onSurfaceColor, fontSize: 14.sp),
                             ),
                           ],
                         ),
@@ -121,7 +123,7 @@ class ReportScreen extends GetView<ReportController> {
                     onChanged: (val) => controller.changeYear(val),
                     decoration: InputDecoration(
                       labelText: 'Année',
-                      labelStyle: TextStyle(color: Colors.grey.shade600),
+                      labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Colors.grey.shade400),
@@ -133,9 +135,10 @@ class ReportScreen extends GetView<ReportController> {
                       filled: true,
                       fillColor: Colors.grey.shade50,
                     ),
+                    style: TextStyle(fontSize: 14.sp),
                   )),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 3.w),
                 Expanded(
                   child: Obx(() => DropdownButtonFormField<String>(
                     value: controller.selectedMonth.value,
@@ -144,11 +147,11 @@ class ReportScreen extends GetView<ReportController> {
                         value: m,
                         child: Row(
                           children: [
-                            Icon(Icons.date_range, color: primaryColor, size: 18),
-                            const SizedBox(width: 8),
+                            Icon(Icons.date_range, color: primaryColor, size: 18.sp),
+                            SizedBox(width: 2.w),
                             Text(
                               m,
-                              style: TextStyle(color: onSurfaceColor),
+                              style: TextStyle(color: onSurfaceColor, fontSize: 14.sp),
                             ),
                           ],
                         ),
@@ -157,7 +160,7 @@ class ReportScreen extends GetView<ReportController> {
                     onChanged: (val) => controller.changeMonth(val),
                     decoration: InputDecoration(
                       labelText: 'Mois',
-                      labelStyle: TextStyle(color: Colors.grey.shade600),
+                      labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Colors.grey.shade400),
@@ -169,6 +172,7 @@ class ReportScreen extends GetView<ReportController> {
                       filled: true,
                       fillColor: Colors.grey.shade50,
                     ),
+                    style: TextStyle(fontSize: 14.sp),
                   )),
                 ),
               ],
@@ -184,16 +188,16 @@ class ReportScreen extends GetView<ReportController> {
     final netColor = report.netResult >= 0 ? successColor : errorColor;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(4.w),
       child: Column(
         children: [
           // Cartes de résumé
           _buildSummaryCards(report, netColor),
-          const SizedBox(height: 24),
+          SizedBox(height: 3.h),
 
           // Section Ventes
           _buildSalesSection(report),
-          const SizedBox(height: 24),
+          SizedBox(height: 3.h),
 
           // Section Dépenses
           _buildExpensesSection(report),
@@ -224,14 +228,14 @@ class ReportScreen extends GetView<ReportController> {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(5.w),
               child: Column(
                 children: [
                   Row(
                     children: [
                       Container(
-                        width: 48,
-                        height: 48,
+                        width: 12.w,
+                        height: 12.w,
                         decoration: BoxDecoration(
                           color: netColor.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(12),
@@ -239,10 +243,10 @@ class ReportScreen extends GetView<ReportController> {
                         child: Icon(
                           report.netResult >= 0 ? Icons.trending_up : Icons.trending_down,
                           color: netColor,
-                          size: 24,
+                          size: 20.sp,
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: 4.w),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,14 +254,14 @@ class ReportScreen extends GetView<ReportController> {
                             Text(
                               'Bilan Mensuel',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 15.sp,
                                 color: Colors.grey.shade600,
                               ),
                             ),
                             Text(
                               '${controller.selectedMonth.value} ${controller.selectedYear.value}',
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.w700,
                                 color: onSurfaceColor,
                               ),
@@ -266,23 +270,23 @@ class ReportScreen extends GetView<ReportController> {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
                         decoration: BoxDecoration(
                           color: netColor,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           '${report.netResult >= 0 ? '+' : ''}${report.netResult.toStringAsFixed(2)} FCFA',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: surfaceColor,
                             fontWeight: FontWeight.w700,
-                            fontSize: 18,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 2.h),
                   Row(
                     children: [
                       Expanded(
@@ -293,7 +297,7 @@ class ReportScreen extends GetView<ReportController> {
                           icon: Icons.arrow_upward,
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: 4.w),
                       Expanded(
                         child: _SummaryItem(
                           title: 'Dépenses',
@@ -309,7 +313,7 @@ class ReportScreen extends GetView<ReportController> {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 2.h),
 
         // Cartes de statistiques détaillées
         Row(
@@ -323,7 +327,7 @@ class ReportScreen extends GetView<ReportController> {
                 icon: Icons.shopping_cart,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 3.w),
             Expanded(
               child: _StatCard(
                 title: 'Nombre de Dépenses',
@@ -346,33 +350,33 @@ class ReportScreen extends GetView<ReportController> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(5.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: 10.w,
+                  height: 10.w,
                   decoration: BoxDecoration(
                     color: successColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(Icons.trending_up, color: successColor, size: 20),
+                  child: Icon(Icons.trending_up, color: successColor, size: 18.sp),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 3.w),
                 Text(
                   'Revenus',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                     color: onSurfaceColor,
                   ),
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.5.h),
                   decoration: BoxDecoration(
                     color: successColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -382,13 +386,13 @@ class ReportScreen extends GetView<ReportController> {
                     style: TextStyle(
                       color: successColor,
                       fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                      fontSize: 15.sp,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 2.h),
 
             if (report.sales.isEmpty)
               _buildEmptyTransactionState('Aucune vente cette période', Icons.shopping_cart)
@@ -409,33 +413,33 @@ class ReportScreen extends GetView<ReportController> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(3.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: 10.w,
+                  height: 10.w,
                   decoration: BoxDecoration(
                     color: errorColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(Icons.trending_down, color: errorColor, size: 20),
+                  child: Icon(Icons.trending_down, color: errorColor, size: 18.sp),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 3.w),
                 Text(
                   'Dépenses',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                     color: onSurfaceColor,
                   ),
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.5.h),
                   decoration: BoxDecoration(
                     color: errorColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -445,13 +449,13 @@ class ReportScreen extends GetView<ReportController> {
                     style: TextStyle(
                       color: errorColor,
                       fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                      fontSize: 15.sp,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 2.h),
 
             if (report.expenses.isEmpty)
               _buildEmptyTransactionState('Aucune dépense cette période', Icons.receipt_long)
@@ -478,7 +482,7 @@ class ReportScreen extends GetView<ReportController> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        child:   buildTransactionCard(
+        child: buildTransactionCard(
           icon: isSale ? Icons.point_of_sale : Icons.receipt_long_rounded,
           title: title,
           date: date,
@@ -491,8 +495,6 @@ class ReportScreen extends GetView<ReportController> {
     );
   }
 
-
-
   Widget buildTransactionCard({
     required IconData icon,
     required String title,
@@ -503,7 +505,7 @@ class ReportScreen extends GetView<ReportController> {
     required Color onSurfaceColor,
   }) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(3.w),
       decoration: BoxDecoration(
         color: Colors.grey.shade50,
         borderRadius: BorderRadius.circular(12),
@@ -512,20 +514,20 @@ class ReportScreen extends GetView<ReportController> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // ✅ Icône à gauche
+          // Icône à gauche
           Container(
-            width: 44,
-            height: 44,
+            width: 12.w,
+            height: 12.w,
             decoration: BoxDecoration(
               color: color.withOpacity(0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: color, size: 22),
+            child: Icon(icon, color: color, size: 18.sp),
           ),
 
-          const SizedBox(width: 12),
+          SizedBox(width: 3.w),
 
-          // ✅ Titre + date principale
+          // Titre + date principale
           Expanded(
             child: Column(
               children: [
@@ -539,7 +541,7 @@ class ReportScreen extends GetView<ReportController> {
                           title,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 15,
+                            fontSize: 14.sp,
                             color: onSurfaceColor,
                           ),
                           overflow: TextOverflow.ellipsis,
@@ -548,13 +550,11 @@ class ReportScreen extends GetView<ReportController> {
                           DateFormat('dd/MM/yyyy à HH:mm').format(date),
                           style: TextStyle(
                             color: Colors.grey.shade600,
-                            fontSize: 13,
+                            fontSize: 15.sp,
                           ),
                         ),
                       ],
                     )
-
-
                   ],
                 ),
                 Row(
@@ -565,7 +565,7 @@ class ReportScreen extends GetView<ReportController> {
                       style: TextStyle(
                         color: color,
                         fontWeight: FontWeight.w700,
-                        fontSize: 16,
+                        fontSize: 14.sp,
                       ),
                     )
                   ],
@@ -573,13 +573,10 @@ class ReportScreen extends GetView<ReportController> {
               ],
             ),
           ),
-
-          // ✅ Montant + date courte (dd/MM)
         ],
       ),
     );
   }
-
 
   Widget _buildEmptyState() {
     return Center(
@@ -587,29 +584,29 @@ class ReportScreen extends GetView<ReportController> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 120,
-            height: 120,
+            width: 30.w,
+            height: 30.w,
             decoration: BoxDecoration(
               color: primaryColor.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.assessment, size: 48, color: primaryColor),
+            child: Icon(Icons.assessment, size: 40.sp, color: primaryColor),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 3.h),
           Text(
             'Aucune donnée disponible',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               color: onSurfaceColor,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 1.h),
           Text(
             'Aucune transaction pour la période sélectionnée',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: Colors.grey.shade500,
             ),
           ),
@@ -623,16 +620,16 @@ class ReportScreen extends GetView<ReportController> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 40),
+          padding: EdgeInsets.symmetric(vertical: 5.h),
           child: Column(
             children: [
-              Icon(icon, size: 48, color: Colors.grey.shade300),
-              const SizedBox(height: 16),
+              Icon(icon, size: 50.sp, color: Colors.grey.shade300),
+              SizedBox(height: 2.h),
               Text(
                 message,
                 style: TextStyle(
                   color: Colors.grey.shade500,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
             ],
@@ -649,12 +646,12 @@ class ReportScreen extends GetView<ReportController> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
-            Icon(Icons.download, color: primaryColor),
-            const SizedBox(width: 12),
+            Icon(Icons.download, color: primaryColor, size: 22.sp),
+            SizedBox(width: 3.w),
             Text(
               'Exporter le rapport',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
                 color: onSurfaceColor,
               ),
@@ -663,14 +660,14 @@ class ReportScreen extends GetView<ReportController> {
         ),
         content: Text(
           'Choisissez le format d\'exportation pour le rapport de ${controller.selectedMonth.value} ${controller.selectedYear.value}',
-          style: TextStyle(color: Colors.grey.shade600),
+          style: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
             child: Text(
               'Annuler',
-              style: TextStyle(color: Colors.grey.shade600),
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
             ),
           ),
           Container(
@@ -695,9 +692,9 @@ class ReportScreen extends GetView<ReportController> {
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
               ),
-              child: const Text(
+              child: Text(
                 'PDF',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white, fontSize: 14.sp),
               ),
             ),
           ),
@@ -724,7 +721,7 @@ class _SummaryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(3),
+      padding: EdgeInsets.all(2.w),
       decoration: BoxDecoration(
         color: ReportScreen.backgroundColor,
         borderRadius: BorderRadius.circular(5),
@@ -740,22 +737,22 @@ class _SummaryItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, color: color, size: 16),
-              const SizedBox(width: 6),
+              Icon(icon, color: color, size: 14.sp),
+              SizedBox(width: 1.w),
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 15.sp,
                   color: Colors.grey.shade600,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 0.5.h),
           Text(
             '${value.toStringAsFixed(2)} FCFA',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w700,
               color: color,
             ),
@@ -799,43 +796,44 @@ class _StatCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(4.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 10.w,
+                height: 10.w,
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, color: color, size: 20),
+                child: Icon(icon, color: color, size: 18.sp),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 2.h),
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey.shade600,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 0.5.h),
               Text(
                 value,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
                   color: color,
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 0.5.h),
               Text(
                 subtitle,
                 style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey.shade500,
+                  fontSize: 13.sp,
+                  color: Colors.grey,
+                    fontWeight: FontWeight.w500,
                 ),
               ),
             ],

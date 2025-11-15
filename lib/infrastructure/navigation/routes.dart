@@ -6,4 +6,6 @@ class Routes {
   static const SALE = '/sale';
   static const EXPENSE = '/expense';
   static const REPORT = '/report';
+  static const TRANSACTION = '/transaction'; // Nouvelle route
+  static const INFO = '/info'; // Nouvelle route
 }

@@ -3,6 +3,7 @@ import 'package:bayamsalam/infrastructure/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 
 import 'controllers/dashboard.controller.dart';
 
@@ -27,11 +28,12 @@ class HomeScreen extends GetView<DashboardController> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Tableau de Bord',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: surfaceColor,
+            fontSize: 18.sp,
           ),
         ),
         backgroundColor: primaryColor,
@@ -39,13 +41,14 @@ class HomeScreen extends GetView<DashboardController> {
         shadowColor: primaryColor.withOpacity(0.3),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh, color: surfaceColor),
+            icon: Icon(Icons.refresh, color: surfaceColor, size: 22.sp),
             onPressed: () => controller.loadDashboard(),
           ),
         ],
       ),
       body: Obx(() {
-        if (controller.isLoading.value && controller.stats.value.recentTransactions.isEmpty) {
+        if (controller.isLoading.value &&
+            controller.stats.value.recentTransactions.isEmpty) {
           return const Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
@@ -58,11 +61,14 @@ class HomeScreen extends GetView<DashboardController> {
           color: surfaceColor,
           onRefresh: controller.loadDashboard,
           child: ListView(
-            padding: const EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(2.h),
             children: [
               // En-tête du mois
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 4.w,
+                  vertical: 2.h,
+                ),
                 decoration: BoxDecoration(
                   color: surfaceColor,
                   borderRadius: BorderRadius.circular(12),
@@ -76,27 +82,31 @@ class HomeScreen extends GetView<DashboardController> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.calendar_today, color: primaryColor, size: 20),
-                    const SizedBox(width: 12),
+                    Icon(Icons.calendar_today, color: primaryColor, size: 22.sp),
+                    SizedBox(width: 3.w),
                     Text(
                       'Résumé de ${controller.currentMonthName.value}',
                       style: textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: onSurfaceColor,
+                        fontSize: 16.sp,
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 1.h),
 
               // Cartes de résumé
               _buildSummaryCards(),
-              const SizedBox(height: 8),
+              SizedBox(height: 2.h),
 
               // Section Actions Rapides
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 3.w,
+                  vertical: 1.h,
+                ),
                 decoration: BoxDecoration(
                   color: surfaceColor,
                   borderRadius: BorderRadius.circular(12),
@@ -113,27 +123,35 @@ class HomeScreen extends GetView<DashboardController> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.rocket_launch, color: primaryColor, size: 20),
-                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.rocket_launch,
+                          color: primaryColor,
+                          size: 22.sp,
+                        ),
+                        SizedBox(width: 2.w),
                         Text(
                           'Actions Rapides',
                           style: textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: onSurfaceColor,
+                            fontSize: 16.sp,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 0.3.h),
                     _buildQuickActions(),
                   ],
                 ),
               ),
-              const SizedBox(height: 28),
+              SizedBox(height: 0.9.h),
 
               // Section Transactions Récentes
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 4.w,
+                  vertical: 2.h,
+                ),
                 decoration: BoxDecoration(
                   color: surfaceColor,
                   borderRadius: BorderRadius.circular(12),
@@ -150,18 +168,19 @@ class HomeScreen extends GetView<DashboardController> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.receipt_long, color: primaryColor, size: 20),
-                        const SizedBox(width: 8),
+                        Icon(Icons.receipt_long, color: primaryColor, size: 22.sp),
+                        SizedBox(width: 2.w),
                         Text(
                           'Transactions Récentes',
                           style: textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: onSurfaceColor,
+                            fontSize: 16.sp,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 2.h),
                     _buildRecentTransactions(),
                   ],
                 ),
@@ -179,8 +198,8 @@ class HomeScreen extends GetView<DashboardController> {
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 16,
-      mainAxisSpacing: 16,
+      crossAxisSpacing: 2.w,
+      mainAxisSpacing: 1.5.h,
       childAspectRatio: 1.4,
       children: [
         _SummaryCard(
@@ -244,32 +263,56 @@ class HomeScreen extends GetView<DashboardController> {
   }
 
   Widget _buildQuickActions() {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _QuickActionButton(
-          icon: Icons.add_shopping_cart,
-          label: 'Vente',
-          onPressed: () => Get.toNamed(Routes.SALE),
-          color: primaryColor,
-        ),
-        _QuickActionButton(
-          icon: Icons.inventory_2,
-          label: 'Produits',
-          onPressed: () => Get.toNamed(Routes.PRODUCT),
-          color: secondaryColor,
-        ),
-        _QuickActionButton(
-          icon: Icons.post_add,
-          label: 'Dépense',
-          onPressed: () => Get.toNamed(Routes.EXPENSE),
-          color: warningColor,
-        ),
-        _QuickActionButton(
-          icon: Icons.assessment,
-          label: 'Bilan',
-          onPressed: () => Get.toNamed(Routes.REPORT),
-          color: successColor,
+        GridView(
+          padding: EdgeInsets.all(4.w),
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            crossAxisSpacing: 3.w,
+            mainAxisSpacing: 2.h,
+          ),
+          children: [
+            _QuickActionButton(
+              icon: Icons.add_shopping_cart,
+              label: 'Vente',
+              onPressed: () => Get.toNamed(Routes.SALE),
+              color: primaryColor,
+            ),
+            _QuickActionButton(
+              icon: Icons.inventory_2,
+              label: 'Produits',
+              onPressed: () => Get.toNamed(Routes.PRODUCT),
+              color: secondaryColor,
+            ),
+            _QuickActionButton(
+              icon: Icons.post_add,
+              label: 'Dépense',
+              onPressed: () => Get.toNamed(Routes.EXPENSE),
+              color: warningColor,
+            ),
+            _QuickActionButton(
+              icon: Icons.assessment,
+              label: 'Bilan',
+              onPressed: () => Get.toNamed(Routes.REPORT),
+              color: successColor,
+            ),
+            _QuickActionButton(
+              icon: Icons.history_toggle_off_rounded,
+              label: 'Historique',
+              onPressed: () => Get.toNamed(Routes.TRANSACTION),
+              color: successColor,
+            ),
+            _QuickActionButton(
+              icon: Icons.info,
+              label: 'Info',
+              onPressed: () => Get.toNamed(Routes.INFO),
+              color: successColor,
+            ),
+          ],
         ),
       ],
     );
@@ -282,16 +325,16 @@ class HomeScreen extends GetView<DashboardController> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 40),
+            padding: EdgeInsets.symmetric(vertical: 5.h),
             child: Column(
               children: [
-                Icon(Icons.receipt, size: 64, color: Colors.grey.shade300),
-                const SizedBox(height: 16),
+                Icon(Icons.receipt, size: 70.sp, color: Colors.grey.shade300),
+                SizedBox(height: 2.h),
                 Text(
                   'Aucune transaction ce mois-ci',
                   style: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontSize: 16,
+                      color: Colors.grey.shade500,
+                      fontSize: 16.sp
                   ),
                 ),
               ],
@@ -308,20 +351,20 @@ class HomeScreen extends GetView<DashboardController> {
         final item = transactions[index];
         final isSale = controller.isSale(item);
         return Container(
-          margin: const EdgeInsets.only(bottom: 5),
+          margin: EdgeInsets.only(bottom: 1.h),
           child: Card(
             elevation: 1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            child:  buildTransactionCard(
+            child: buildTransactionCard(
               item: item,
               isSale: isSale,
               successColor: Colors.green,
               errorColor: Colors.red,
               onSurfaceColor: Colors.black87,
               controller: controller,
-            )
+            ),
           ),
         );
       },
@@ -338,11 +381,9 @@ Widget buildTransactionCard({
   required controller,
 }) {
   return Container(
-    margin: const EdgeInsets.symmetric(vertical: 6),
-    padding: const EdgeInsets.fromLTRB(6, 6, 6, 2),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12),
-    ),
+    margin: EdgeInsets.symmetric(vertical: 0.5.h),
+    padding: EdgeInsets.fromLTRB(2.w, 1.h, 2.w, 0.5.h),
+    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
     child: Column(
       children: [
         Row(
@@ -350,8 +391,8 @@ Widget buildTransactionCard({
           children: [
             // Icône transaction
             Container(
-              width: 44,
-              height: 44,
+              width: 12.w,
+              height: 12.w,
               decoration: BoxDecoration(
                 color: (isSale ? successColor : errorColor).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
@@ -359,11 +400,11 @@ Widget buildTransactionCard({
               child: Icon(
                 isSale ? Icons.point_of_sale : Icons.receipt_long_rounded,
                 color: isSale ? successColor : errorColor,
-                size: 22,
+                size: 20.sp,
               ),
             ),
 
-            const SizedBox(width: 12),
+            SizedBox(width: 3.w),
 
             // Texte principal (titre + date)
             Expanded(
@@ -374,16 +415,15 @@ Widget buildTransactionCard({
                     controller.getTransactionTitle(item),
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 15,
+                      fontSize: 16.sp,
                       color: onSurfaceColor,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 0.5.h),
                 ],
               ),
             ),
-
           ],
         ),
         // Montant
@@ -395,7 +435,7 @@ Widget buildTransactionCard({
               style: TextStyle(
                 color: isSale ? successColor : errorColor,
                 fontWeight: FontWeight.w700,
-                fontSize: 15,
+                fontSize: 16.sp,
               ),
             ),
           ],
@@ -404,16 +444,13 @@ Widget buildTransactionCard({
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              DateFormat("le dd/MM/yyyy à HH:mm")
-                  .format(controller.getTransactionDate(item)),
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey.shade600,
-              ),
+              DateFormat(
+                "le dd/MM/yyyy à HH:mm",
+              ).format(controller.getTransactionDate(item)),
+              style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade600),
             ),
           ],
         ),
-
       ],
     ),
   );
@@ -439,42 +476,39 @@ class _SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(
         decoration: BoxDecoration(
           gradient: gradient,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(2.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(2.w),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, color: Colors.white, size: 20),
+                child: Icon(icon, color: Colors.white, size: 20.sp),
               ),
               const Spacer(),
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(height: 4),
               Text(
                 '${amount.toString()} FCFA',
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 14,
+                  fontSize: 14.7.sp,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -525,15 +559,15 @@ class _QuickActionButton extends StatelessWidget {
               backgroundColor: Colors.transparent,
               foregroundColor: Colors.white,
             ),
-            icon: Icon(icon, size: 24),
+            icon: Icon(icon, size: 20.sp),
           ),
         ),
-        const SizedBox(height: 8),
         Text(
           label,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: HomeScreen.onSurfaceColor,
             fontWeight: FontWeight.w500,
+            fontSize: 14.sp,
           ),
         ),
       ],

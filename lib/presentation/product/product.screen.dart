@@ -2,6 +2,7 @@ import 'package:bayamsalam/domain/core/entities/product.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 import '../../domain/core/entities/product_sale.dart';
 import 'controllers/product.controller.dart';
 
@@ -23,11 +24,12 @@ class ProductScreen extends GetView<ProductController> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Gestion des Produits',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: surfaceColor,
+            fontSize: 18.sp,
           ),
         ),
         backgroundColor: primaryColor,
@@ -49,7 +51,7 @@ class ProductScreen extends GetView<ProductController> {
 
   Widget _buildProductListWithForm() {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(4.w),
       child: Column(
         children: [
           Card(
@@ -58,26 +60,26 @@ class ProductScreen extends GetView<ProductController> {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(4.w),
               child: _buildProductForm(),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 2.h),
           Row(
             children: [
-              Icon(Icons.inventory_2, color: primaryColor, size: 20),
-              const SizedBox(width: 8),
+              Icon(Icons.inventory_2, color: primaryColor, size: 20.sp),
+              SizedBox(width: 2.w),
               Text(
                 'Liste des Produits',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   color: onSurfaceColor,
                 ),
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.5.h),
                 decoration: BoxDecoration(
                   color: primaryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(6),
@@ -87,13 +89,13 @@ class ProductScreen extends GetView<ProductController> {
                   style: TextStyle(
                     color: primaryColor,
                     fontWeight: FontWeight.w600,
-                    fontSize: 12,
+                    fontSize: 12.sp,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 2.h),
           Expanded(child: _buildProductList()),
         ],
       ),
@@ -107,48 +109,54 @@ class ProductScreen extends GetView<ProductController> {
         Text(
           controller.isEditing.value ? 'Modifier le produit' : 'Nouveau produit',
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w600,
             color: onSurfaceColor,
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 2.h),
         TextFormField(
           controller: controller.nameController,
           decoration: InputDecoration(
             labelText: 'Nom du produit',
+            labelStyle: TextStyle(fontSize: 14.sp),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
             filled: true,
             fillColor: Colors.grey.shade50,
           ),
+          style: TextStyle(fontSize: 14.sp),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 2.h),
         TextFormField(
           controller: controller.purchasePriceController,
           decoration: InputDecoration(
             labelText: 'Prix d\'achat',
+            labelStyle: TextStyle(fontSize: 14.sp),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
             prefixText: 'FCFA ',
+            prefixStyle: TextStyle(fontSize: 14.sp),
             filled: true,
             fillColor: Colors.grey.shade50,
           ),
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          style: TextStyle(fontSize: 14.sp),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 2.h),
         Align(
           alignment: Alignment.centerRight,
           child: ElevatedButton.icon(
             icon: Icon(
               controller.isEditing.value ? Icons.edit : Icons.add,
               color: surfaceColor,
+              size: 18.sp,
             ),
             label: Text(
               controller.isEditing.value ? 'Modifier' : 'Ajouter',
-              style: const TextStyle(color: surfaceColor),
+              style: TextStyle(color: surfaceColor, fontSize: 14.sp),
             ),
             onPressed: () => controller.isEditing.value
                 ? controller.updateProduct()
@@ -156,6 +164,7 @@ class ProductScreen extends GetView<ProductController> {
             style: ElevatedButton.styleFrom(
               backgroundColor:
               controller.isEditing.value ? warningColor : successColor,
+              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
             ),
           ),
         ),
@@ -165,8 +174,11 @@ class ProductScreen extends GetView<ProductController> {
 
   Widget _buildProductList() {
     if (controller.products.isEmpty) {
-      return const Center(
-        child: Text('Aucun produit enregistré'),
+      return Center(
+        child: Text(
+          'Aucun produit enregistré',
+          style: TextStyle(fontSize: 16.sp),
+        ),
       );
     }
 
@@ -175,86 +187,85 @@ class ProductScreen extends GetView<ProductController> {
       itemBuilder: (context, index) {
         final product = controller.products[index];
         return Card(
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.15),
-                  blurRadius: 6,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Icône principale
-                Container(
-                  width: 45,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 3.w),
+              padding: EdgeInsets.all(3.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.15),
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
                   ),
-                  child: const Icon(Icons.inventory_2, color: Colors.blueGrey),
-                ),
+                ],
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Icône principale
+                  Container(
+                    width: 12.w,
+                    height: 12.w,
+                    decoration: BoxDecoration(
+                      color: primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(Icons.inventory_2, color: Colors.blueGrey, size: 18.sp),
+                  ),
 
-                const SizedBox(width: 12),
+                  SizedBox(width: 3.w),
 
-                // Informations du produit
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => _showProductDetailsDialog(context, product),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
+                  // Informations du produit
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => _showProductDetailsDialog(context, product),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.name,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Prix d\'achat : ${product.purchasePrice.toStringAsFixed(0)} FCFA',
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 13,
+                          SizedBox(height: 0.5.h),
+                          Text(
+                            'Prix d\'achat : ${product.purchasePrice.toStringAsFixed(0)} FCFA',
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 12.sp,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
-                // Actions
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit_note),
-                      color: warningColor,
-                      tooltip: 'Modifier',
-                      onPressed: () => controller.startEditing(product),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete_outline),
-                      color: errorColor,
-                      tooltip: 'Supprimer',
-                      onPressed: () => _showDeleteDialog(product),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          )
-
+                  // Actions
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit_note, size: 20.sp),
+                        color: warningColor,
+                        tooltip: 'Modifier',
+                        onPressed: () => controller.startEditing(product),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete_outline, size: 20.sp),
+                        color: errorColor,
+                        tooltip: 'Supprimer',
+                        onPressed: () => _showDeleteDialog(product),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
         );
       },
     );
@@ -288,16 +299,16 @@ class ProductScreen extends GetView<ProductController> {
       appBar: AppBar(
         backgroundColor: primaryColor,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: surfaceColor),
+          icon: Icon(Icons.close, color: surfaceColor, size: 22.sp),
           onPressed: () => Get.back(),
         ),
-        title: const Text(
+        title: Text(
           'Détails du Produit',
-          style: TextStyle(color: surfaceColor),
+          style: TextStyle(color: surfaceColor, fontSize: 18.sp),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(6.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -305,31 +316,31 @@ class ProductScreen extends GetView<ProductController> {
             Row(
               children: [
                 Container(
-                  width: 50,
-                  height: 50,
+                  width: 15.w,
+                  height: 15.w,
                   decoration: BoxDecoration(
                     color: primaryColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.inventory_2,
-                      color: surfaceColor, size: 20),
+                  child: Icon(Icons.inventory_2,
+                      color: surfaceColor, size: 20.sp),
                 ),
-                const SizedBox(width: 20),
+                SizedBox(width: 5.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Nom :${product.name}",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
                         color: onSurfaceColor,
                       ),
                     ),
                     Text(
-                     "Prix achat :${product.purchasePrice.toString()} FCFA",
+                      "Prix achat :${product.purchasePrice.toString()} FCFA",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
                         color: onSurfaceColor,
                       ),
@@ -338,18 +349,18 @@ class ProductScreen extends GetView<ProductController> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 4.h),
 
             // Statistiques (mise à jour automatique)
             Text(
               'Statistiques',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18.sp,
                 fontWeight: FontWeight.w700,
                 color: onSurfaceColor,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 2.h),
             Obx(() {
               final stats = controller.productStats.value;
               return Row(
@@ -363,7 +374,7 @@ class ProductScreen extends GetView<ProductController> {
                       icon: Icons.trending_up,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 4.w),
                   Expanded(
                     child: _StatCard(
                       title: 'Bénéfice Net',
@@ -379,21 +390,21 @@ class ProductScreen extends GetView<ProductController> {
               );
             }),
 
-            const SizedBox(height: 32),
+            SizedBox(height: 4.h),
             Text(
               'Historique des ventes',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
                 color: onSurfaceColor,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 2.h),
             if (sortedSales.isEmpty)
               _buildEmptySales()
             else
               Column(
-                children:                sortedSales.map((s) => _SaleItem(sale: s)).toList(),
+                children: sortedSales.map((s) => _SaleItem(sale: s)).toList(),
               ),
           ],
         ),
@@ -402,10 +413,13 @@ class ProductScreen extends GetView<ProductController> {
   }
 
   Widget _buildEmptySales() {
-    return const Center(
+    return Center(
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 40),
-        child: Text('Aucune vente enregistrée'),
+        padding: EdgeInsets.symmetric(vertical: 5.h),
+        child: Text(
+          'Aucune vente enregistrée',
+          style: TextStyle(fontSize: 16.sp),
+        ),
       ),
     );
   }
@@ -413,16 +427,28 @@ class ProductScreen extends GetView<ProductController> {
   void _showDeleteDialog(Product product) {
     Get.dialog(
       AlertDialog(
-        title: const Text('Supprimer le produit'),
-        content: Text('Voulez-vous supprimer "${product.name}" ?'),
+        title: Text(
+          'Supprimer le produit',
+          style: TextStyle(fontSize: 16.sp),
+        ),
+        content: Text(
+          'Voulez-vous supprimer "${product.name}" ?',
+          style: TextStyle(fontSize: 14.sp),
+        ),
         actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('Annuler')),
+          TextButton(
+              onPressed: () => Get.back(),
+              child: Text('Annuler', style: TextStyle(fontSize: 14.sp))
+          ),
           TextButton(
             onPressed: () {
               controller.deleteProduct(product.id);
               Get.back();
             },
-            child: const Text('Supprimer', style: TextStyle(color: errorColor)),
+            child: Text(
+                'Supprimer',
+                style: TextStyle(color: errorColor, fontSize: 14.sp)
+            ),
           ),
         ],
       ),
@@ -448,7 +474,7 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
         color: ProductScreen.backgroundColor,
         borderRadius: BorderRadius.circular(16),
@@ -465,23 +491,27 @@ class _StatCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title,
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
-              Icon(icon, color: color, size: 24),
+              Text(
+                title,
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 12.sp),
+              ),
+              Icon(icon, color: color, size: 20.sp),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 1.h),
           Text(
             value,
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 16.sp,
               fontWeight: FontWeight.bold,
               color: color,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(subtitle,
-              style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
+          SizedBox(height: 0.5.h),
+          Text(
+            subtitle,
+            style: TextStyle(color: Colors.grey.shade500, fontSize: 11.sp),
+          ),
         ],
       ),
     );
@@ -495,15 +525,16 @@ class _SaleItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: 2.h),
       child: Row(
         children: [
-          const Icon(Icons.point_of_sale, color: ProductScreen.successColor),
-          const SizedBox(width: 12),
+          Icon(Icons.point_of_sale, color: ProductScreen.successColor, size: 18.sp),
+          SizedBox(width: 3.w),
           Expanded(
             child: Text(
               'Vendu pour ${sale.salePrice.toStringAsFixed(0)} FCFA - '
                   '${DateFormat('dd/MM/yyyy').format(sale.saleDate)}',
+              style: TextStyle(fontSize: 14.sp),
             ),
           ),
         ],

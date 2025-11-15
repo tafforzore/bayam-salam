@@ -3,6 +3,7 @@ import 'package:bayamsalam/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 
 import 'controllers/sale.controller.dart';
 
@@ -25,11 +26,12 @@ class SaleScreen extends GetView<SaleController> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Gestion des Ventes',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: surfaceColor,
+            fontSize: 18.sp,
           ),
         ),
         backgroundColor: primaryColor,
@@ -48,7 +50,7 @@ class SaleScreen extends GetView<SaleController> {
         return Column(
           children: [
             _buildSaleForm(context),
-            const SizedBox(height: 16),
+            SizedBox(height: 2.h),
             _buildSalesList(),
           ],
         );
@@ -58,13 +60,13 @@ class SaleScreen extends GetView<SaleController> {
 
   Widget _buildSaleForm(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(16),
+      margin: EdgeInsets.all(4.w),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(5.w),
         child: Column(
           children: [
             // En-tête du formulaire
@@ -73,27 +75,27 @@ class SaleScreen extends GetView<SaleController> {
                 Icon(
                   controller.isEditing.value ? Icons.edit_note : Icons.add_shopping_cart,
                   color: controller.isEditing.value ? warningColor : primaryColor,
-                  size: 24,
+                  size: 24.sp,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 2.w),
                 Text(
                   controller.isEditing.value ? 'Modifier la vente' : 'Nouvelle vente',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                     color: onSurfaceColor,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 2.h),
 
             // Sélection du produit
             DropdownButtonFormField<String>(
               value: controller.selectedProductId.value,
               hint: Text(
                 'Sélectionnez un produit',
-                style: TextStyle(color: Colors.grey.shade600),
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
               ),
               onChanged: (value) {
                 if (value != null) {
@@ -105,11 +107,11 @@ class SaleScreen extends GetView<SaleController> {
                   value: product.id,
                   child: Row(
                     children: [
-                      Icon(Icons.inventory_2, color: primaryColor, size: 18),
-                      const SizedBox(width: 8),
+                      Icon(Icons.inventory_2, color: primaryColor, size: 18.sp),
+                      SizedBox(width: 2.w),
                       Text(
                         product.name,
-                        style: TextStyle(color: onSurfaceColor),
+                        style: TextStyle(color: onSurfaceColor, fontSize: 14.sp),
                       ),
                     ],
                   ),
@@ -126,17 +128,18 @@ class SaleScreen extends GetView<SaleController> {
                 ),
                 filled: true,
                 fillColor: Colors.grey.shade50,
-                prefixIcon: Icon(Icons.search, color: primaryColor),
+                prefixIcon: Icon(Icons.search, color: primaryColor, size: 20.sp),
               ),
+              style: TextStyle(fontSize: 14.sp),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 2.h),
 
             // Prix de vente
             TextFormField(
               controller: controller.salePriceController,
               decoration: InputDecoration(
                 labelText: 'Prix de vente',
-                labelStyle: TextStyle(color: Colors.grey.shade600),
+                labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Colors.grey.shade400),
@@ -147,18 +150,19 @@ class SaleScreen extends GetView<SaleController> {
                 ),
                 filled: true,
                 fillColor: Colors.grey.shade50,
-                prefixIcon: Icon(Icons.euro, color: primaryColor),
+                prefixIcon: Icon(Icons.euro, color: primaryColor, size: 20.sp),
                 suffixText: 'FCFA',
+                suffixStyle: TextStyle(fontSize: 14.sp),
               ),
               keyboardType: TextInputType.number,
-              style: TextStyle(color: onSurfaceColor),
+              style: TextStyle(color: onSurfaceColor, fontSize: 14.sp),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 3.h),
 
             // Bouton d'action
             Container(
               width: double.infinity,
-              height: 50,
+              height: 6.h,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -180,13 +184,14 @@ class SaleScreen extends GetView<SaleController> {
                 icon: Icon(
                   controller.isEditing.value ? Icons.edit : Icons.add,
                   color: surfaceColor,
+                  size: 20.sp,
                 ),
                 label: Text(
                   controller.isEditing.value ? 'Modifier la Vente' : 'Ajouter la Vente',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: surfaceColor,
                     fontWeight: FontWeight.w600,
-                    fontSize: 16,
+                    fontSize: 14.sp,
                   ),
                 ),
                 onPressed: () {
@@ -204,10 +209,13 @@ class SaleScreen extends GetView<SaleController> {
 
             // Bouton annuler en mode édition
             if (controller.isEditing.value) ...[
-              const SizedBox(height: 12),
+              SizedBox(height: 1.h),
               TextButton.icon(
-                icon: const Icon(Icons.cancel_outlined),
-                label: const Text('Annuler'),
+                icon: Icon(Icons.cancel_outlined, size: 18.sp),
+                label: Text(
+                  'Annuler',
+                  style: TextStyle(fontSize: 14.sp),
+                ),
                 onPressed: () => _cancelEditing(),
                 style: TextButton.styleFrom(
                   foregroundColor: errorColor,
@@ -226,22 +234,22 @@ class SaleScreen extends GetView<SaleController> {
         children: [
           // En-tête de la liste
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(horizontal: 6.w),
             child: Row(
               children: [
-                Icon(Icons.history, color: primaryColor, size: 20),
-                const SizedBox(width: 8),
+                Icon(Icons.history, color: primaryColor, size: 20.sp),
+                SizedBox(width: 2.w),
                 Text(
                   'Ventes du Mois',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                     color: onSurfaceColor,
                   ),
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.5.h),
                   decoration: BoxDecoration(
                     color: primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(6),
@@ -251,14 +259,14 @@ class SaleScreen extends GetView<SaleController> {
                     style: TextStyle(
                       color: primaryColor,
                       fontWeight: FontWeight.w600,
-                      fontSize: 12,
+                      fontSize: 12.sp,
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 2.h),
 
           // Liste des ventes
           Expanded(
@@ -277,23 +285,23 @@ class SaleScreen extends GetView<SaleController> {
           children: [
             Icon(
               Icons.shopping_cart_checkout,
-              size: 64,
+              size: 70.sp,
               color: Colors.grey.shade300,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 2.h),
             Text(
               'Aucune vente ce mois-ci',
               style: TextStyle(
                 color: Colors.grey.shade500,
-                fontSize: 16,
+                fontSize: 16.sp,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 1.h),
             Text(
               'Ajoutez votre première vente',
               style: TextStyle(
                 color: Colors.grey.shade400,
-                fontSize: 14,
+                fontSize: 14.sp,
               ),
             ),
           ],
@@ -302,20 +310,20 @@ class SaleScreen extends GetView<SaleController> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 4.w),
       child: ListView.builder(
         itemCount: controller.sales.length,
         itemBuilder: (context, index) {
           final sale = controller.sales[index];
           return Container(
-            margin: const EdgeInsets.only(bottom: 8),
+            margin: EdgeInsets.only(bottom: 1.h),
             child: Card(
               elevation: 1,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(3.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -324,8 +332,8 @@ class SaleScreen extends GetView<SaleController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: 40,
-                          height: 40,
+                          width: 10.w,
+                          height: 10.w,
                           decoration: BoxDecoration(
                             color: successColor.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
@@ -333,20 +341,21 @@ class SaleScreen extends GetView<SaleController> {
                           child: Icon(
                             Icons.monetization_on_outlined,
                             color: successColor,
-                            size: 20,
+                            size: 18.sp,
                           ),
                         ),
-                        SizedBox(width: 10,),
+                        SizedBox(width: 3.w),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width*.60  ,
+                              width: MediaQuery.of(context).size.width * 0.55,
                               child: Text(
                                 'Vente de ${controller.getProductName(sale)}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   color: onSurfaceColor,
+                                  fontSize: 14.sp,
                                 ),
                               ),
                             ),
@@ -354,6 +363,7 @@ class SaleScreen extends GetView<SaleController> {
                               DateFormat('le dd/MM/yyyy à HH:mm').format(sale.saleDate),
                               style: TextStyle(
                                 color: Colors.grey.shade600,
+                                fontSize: 12.sp,
                               ),
                             ),
                           ],
@@ -361,13 +371,8 @@ class SaleScreen extends GetView<SaleController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            // IconButton(
-                            //   padding: EdgeInsets.all(0),
-                            //   icon: Icon(Icons.edit_note, color: warningColor),
-                            //   onPressed: () => controller.startEditing(sale),
-                            // ),
                             IconButton(
-                              icon: Icon(Icons.delete_outline, color: errorColor),
+                              icon: Icon(Icons.delete_outline, color: errorColor, size: 20.sp),
                               onPressed: () => _showDeleteDialog(sale),
                             ),
                           ],
@@ -382,7 +387,7 @@ class SaleScreen extends GetView<SaleController> {
                           style: TextStyle(
                             color: successColor,
                             fontWeight: FontWeight.w700,
-                            fontSize: 16,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ],
@@ -410,24 +415,24 @@ class SaleScreen extends GetView<SaleController> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
-            Icon(Icons.warning, color: errorColor),
-            const SizedBox(width: 8),
+            Icon(Icons.warning, color: errorColor, size: 22.sp),
+            SizedBox(width: 2.w),
             Text(
               'Confirmer la suppression',
-              style: TextStyle(color: onSurfaceColor, fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(color: onSurfaceColor, fontSize: 16.sp, fontWeight: FontWeight.bold),
             ),
           ],
         ),
         content: Text(
           'Êtes-vous sûr de vouloir supprimer la vente de ${controller.getProductName(sale)} ?',
-          style: TextStyle(color: onSurfaceColor),
+          style: TextStyle(color: onSurfaceColor, fontSize: 14.sp),
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
             child: Text(
               'Annuler',
-              style: TextStyle(color: Colors.grey.shade600),
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
             ),
           ),
           Container(
@@ -446,9 +451,9 @@ class SaleScreen extends GetView<SaleController> {
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
               ),
-              child: const Text(
+              child: Text(
                 'Supprimer',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white, fontSize: 14.sp),
               ),
             ),
           ),

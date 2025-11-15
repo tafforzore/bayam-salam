@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:sizer/sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,11 +23,14 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false, // Petite amélioration esthétique
-      // La route de démarrage est maintenant le splash screen
-      initialRoute: Routes.SPLASH,
-      getPages: Nav.routes,
+    return Sizer(
+        builder: (context, orientation, deviceType) {
+      return GetMaterialApp(
+        debugShowCheckedModeBanner: false, // Petite amélioration esthétique
+        // La route de démarrage est maintenant le splash screen
+        initialRoute: Routes.SPLASH,
+        getPages: Nav.routes,
+      );}
     );
   }
 }
